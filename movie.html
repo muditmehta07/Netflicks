@@ -126,8 +126,7 @@
     </script>
 
     <script>
-                // Function to fetch movie data from OMDB API
-                async function fetchMovieData(title) {
+        async function fetchMovieData(title) {
             const apiKey = 'e5a0f4ec';
             const apiUrl = `https://www.omdbapi.com/?apikey=${apiKey}&t=${encodeURIComponent(title)}`;
             
@@ -141,7 +140,6 @@
             }
         }
 
-        // Function to display movies in a section
         async function fetchAndDisplayMovies(sectionId, movies) {
             const section = document.getElementById(sectionId);
             const movieList = section.querySelector('.movie-list');
