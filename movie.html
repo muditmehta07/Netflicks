@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">Netflicks</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="nav" id="navContainer">
+        <nav class="navbar">
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="movie-section.html">Movies</a>
+                <a href="tv-section.html">TV Shows</a>
+                <a href="#">My List</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" class="search-bar" id="movie-search" placeholder="Search...">
+                <button type="submit" class="play-button" id="play-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </nav>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="left-container">
+                <iframe class="iframeContainer" id="iframeContainer" allowfullscreen></iframe>
+            </div>
+    
+            <div class="right-container">
+                <h1 id="movie-title"></h1>
+                <div class="content-box">
+                    <p id="movie-rating" style="color: rgb(202, 161, 0); font-style: oblique;"></p>
+                    <p id="movie-description" style="font-size: small; color: rgba(255, 255, 255, 0.56);"></p>
+                    <p id="movie-director"></p>
+                    <p id="movie-writer"></p>
+                    <p id="movie-actors"></p>
+                    <p id="movie-release"></p>
+                    <p id="movie-genre"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="recommendations" id="recommendations">
+            <div class="section" id="new">
+                <h2>More Like This</h2>
+                <div class="movie-list" id="new"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('play-button').addEventListener('click', function() {
+            var movieTitle = document.getElementById('movie-search').value.trim();
+            if (movieTitle !== '') {
+                fetch(`https://www.omdbapi.com/?apikey=e5a0f4ec&t=${encodeURIComponent(movieTitle)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.Response === 'True') {
+                            const movieData = {
+                                title: data.Title,
+                                id: data.imdbID,
+                                year: data.Year,
+                                plot: data.Plot,
+                                rated: data.Rated,
+                                released: data.Released,
+                                runtime: data.Runtime,
+                                genre: data.Genre,
+                                director: data.Director,
+                                writer: data.Writer,
+                                actors: data.Actors,
+                                language: data.Language,
+                                imdbRating: data.imdbRating,
+                                type: data.Type
+                            };
+
+                            const jsonString = JSON.stringify(movieData);
+                            window.location.href = 'movie.html?data=' + encodeURIComponent(jsonString);
+                        } else {
+                            alert('Title not found! Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error fetching movie data. Please try again later.');
+                        console.log(error);
+                    });
+            } else {
+                alert('Please enter a movie title.');
+            }
+        });
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const jsonData = urlParams.get('data');
+        const movieData = JSON.parse(decodeURIComponent(jsonData));
+
+        var imdbID = movieData.id;
+        var movieURL = `https://multiembed.mov/?video_id=${imdbID}`;
+        var movieTitle = movieData.title;
+        var movieYear = movieData.year;
+        var moviePlot = movieData.plot;
+        var rated = movieData.rated;
+        var released = movieData.released;
+        var runtime = movieData.runtime;
+        var genre = movieData.genre;
+        var director = movieData.director;
+        var writer = movieData.writer;
+        var actors = movieData.actors;
+        var language = movieData.language;
+        var imdbRating = movieData.imdbRating;
+        var type = movieData.type;
+        
+        document.getElementById('movie-title').innerText = movieTitle;
+        document.getElementById('movie-rating').innerText = `IMDb - ${imdbRating}`;
+        document.getElementById('movie-description').innerText = `${rated} • ${runtime} • ${movieYear}`;
+        document.getElementById('movie-director').innerHTML = `<strong>Director:</strong> ${director}`;
+        document.getElementById('movie-writer').innerHTML = `<strong>Writer:</strong> ${writer}`;
+        document.getElementById('movie-actors').innerHTML = `<strong>Actors:</strong> ${actors}`;
+        document.getElementById('movie-release').innerHTML = `<strong>Release Date:</strong> ${released}`;
+
+        document.getElementById('title').innerText = `Netflicks | ${movieTitle}`;
+        document.getElementById('iframeContainer').src = movieURL;
+    </script>
+
+    <script>
+                // Function to fetch movie data from OMDB API
+                async function fetchMovieData(title) {
+            const apiKey = 'e5a0f4ec';
+            const apiUrl = `https://www.omdbapi.com/?apikey=${apiKey}&t=${encodeURIComponent(title)}`;
+            
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching movie data:', error);
+                return null;
+            }
+        }
+
+        // Function to display movies in a section
+        async function fetchAndDisplayMovies(sectionId, movies) {
+            const section = document.getElementById(sectionId);
+            const movieList = section.querySelector('.movie-list');
+
+            for (let i = 0; i < movies.length; i++) {
+                const movieTitle = movies[i];
+                const movieData = await fetchMovieData(movieTitle);
+
+                if (movieData && movieData.Poster && movieData.Title && movieData.imdbID) {
+                    const movieCard = document.createElement('div');
+                    movieCard.classList.add('movie-card');
+
+                    const posterLink = document.createElement('a');
+                    const data = {
+                        title: movieData.Title,
+                        id: movieData.imdbID,
+                        year: movieData.Year,
+                        plot: movieData.Plot,
+                        rated: movieData.Rated,
+                        released: movieData.Released,
+                        runtime: movieData.Runtime,
+                        genre: movieData.Genre,
+                        director: movieData.Director,
+                        writer: movieData.Writer,
+                        actors: movieData.Actors,
+                        language: movieData.Language,
+                        imdbRating: movieData.imdbRating,
+                        type: movieData.Type
+                    };
+                    const jsonString = JSON.stringify(data);
+                    posterLink.href = `movie.html?data=${encodeURIComponent(jsonString)}`;
+
+                    const posterImg = document.createElement('img');
+                    posterImg.classList.add('movie-poster');
+                    posterImg.src = movieData.Poster;
+                    posterImg.alt = `${movieData.Title} Poster`;
+
+                    posterLink.appendChild(posterImg);
+                    movieCard.appendChild(posterLink);
+
+                    movieList.appendChild(movieCard);
+                }
+            }
+        }
+
+        async function displayMovies() {
+            await fetchAndDisplayMovies('new', [
+                "Inside Out 2",
+                "Hit Man",
+                "Oppenheimer",
+                "Barbie",
+                "Spider-Man: Across The Spider-Verse",
+                "The Idea of You",
+                "The Fall Guy",
+                "Dune: Part Two"
+            ]);
+
+            await fetchAndDisplayMovies('next', [
+                "Maxton Hall",
+                "Migration",
+                "The Boys",
+                "Dunkirk",
+                "Spaceman",
+                "Jack Ryan",
+                "Blue Beetle",
+                "Ferrari"
+            ]);
+
+            await fetchAndDisplayMovies('today', [
+                "Pokemon Mewtwo Strikes Back",
+                "The Social Network",
+                "Baby Driver",
+                "Money Heist",
+                "The Flash",
+                "The Shawshank Redemption",
+                "Back to the Future",
+                "Shutter Island"
+            ]);
+        }
+
+        displayMovies();
+    </script>
+</body>
+</html>
