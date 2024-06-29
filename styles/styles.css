@@ -93,6 +93,31 @@ body {
     width: 800px;
 }
 
+@media screen and (max-width: 600px) {
+    .iframeContainer {
+        border: none;
+        height: 210px;
+        width: 340px;
+    }
+
+    .left-container, .right-container {
+        float: left;
+        margin-right: 20px;
+        flex: 1;
+        max-width: 90%;
+    }
+    
+    .right-container p {
+        word-wrap: break-word;
+    }
+    
+    .recommendations {
+        margin-top: 3%;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
 .home {
     margin-top: 2%;
     margin-left: 3%;
