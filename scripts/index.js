@@ -89,7 +89,7 @@ document.getElementById('play-button').addEventListener('click', function() {
             title: movieTitle
         };
         const jsonString = JSON.stringify(movieData);
-        window.location.href = '../sections/search.html?data=' + encodeURIComponent(jsonString);
+        window.location.href = 'sections/search.html?data=' + encodeURIComponent(jsonString);
     } else {
         alert('Please enter a movie title.');
     }
