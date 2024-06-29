@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | Netflicks</title>
-    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="../styles/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="nav" id="navContainer">
         <nav class="navbar">
             <div class="nav-links">
-                <a class="active" href="index.html">Home</a>
-                <a href="sections/movie.html">Movies</a>
-                <a href="sections/tv.html">TV Shows</a>
-                <a href="sections/mylist.html">My List</a>
+                <a href="../index.html">Home</a>
+                <a class="active" href="movie.html">Movies</a>
+                <a href="tv.html">TV Shows</a>
+                <a href="mylist.html">My List</a>
             </div>
             
             <div class="search-bar">
@@ -27,20 +27,20 @@
     </div>
 
     <div class="home" id="home">
-        <div class="section" id="new">
-            <h2>New on Netflicks</h2>
-            <div class="movie-list" id="new"></div>
+        <div class="section" id="horror">
+            <h2>Horror</h2>
+            <div class="movie-list" id="horror"></div>
         </div>
-        <div class="section" id="next">
-            <h2>Your Next Watch</h2>
-            <div class="movie-list" id="next"></div>
+        <div class="section" id="comedy">
+            <h2>Comedy</h2>
+            <div class="movie-list" id="comedy"></div>
         </div>
-        <div class="section" id="today">
-            <h2>Today's Top Picks For You</h2>
-            <div class="movie-list" id="today"></div>
+        <div class="section" id="romance">
+            <h2>Romance</h2>
+            <div class="movie-list" id="romance"></div>
         </div>
     </div>
 
-    <script src="scripts/index.js"></script>
+    <script src="../scripts/movie.js"></script>
 </body>
 </html>
